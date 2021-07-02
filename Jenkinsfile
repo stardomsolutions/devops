@@ -141,10 +141,11 @@ pipeline {
                db: { 
                   script {
                      def remote = [:]
-                     remote.name = 'production'
+                     remote.name = 'staging'
                      remote.user = 'vagrant'
                      remote.allowAnyHosts = true
-                     remote.host = 'production.devops'
+                     remote.host = 'staging.devops'
+                     remote.identityFile = '~/.ssh/staging.key'
                      sshCommand remote: remote, command: "docker stop mysqldb backend frontend || true"
                      sshCommand remote: remote, command: "docker rm backend mysqldb frontend || true"
                      sshCommand remote: remote, command: "docker rmi ${DOCKER_REGISTRY}/devops/api:production ${DOCKER_REGISTRY}/devops/ui:production || true"
