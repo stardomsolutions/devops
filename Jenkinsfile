@@ -122,9 +122,6 @@ pipeline {
       }
       stage('Production Setup') {
          steps {
-            sh '''
-		            sleep 5
-            '''
             parallel(
                ui: { // Prepare the Docker image for the staging ui
                   sh '''
