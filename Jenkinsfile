@@ -122,6 +122,9 @@ pipeline {
       }
       stage('Production Setup') {
          steps {
+            sh '''
+		            sleep 5
+            '''
             parallel(
                ui: { // Prepare the Docker image for the staging ui
                   sh '''
@@ -140,15 +143,15 @@ pipeline {
                },
                db: { 
                   script {
-                     def remote = [:]
-                     remote.name = 'staging'
-                     remote.user = 'vagrant'
-                     remote.allowAnyHosts = true
-                     remote.host = 'staging.devops'
-                     remote.identityFile = '~/.ssh/staging.key'
+		     def remote = [:]
+		     remote.name = 'production'
+		     remote.user = 'vagrant'
+		     remote.allowAnyHosts = true
+		     remote.host = 'production.devops'
+		     remote.identityFile = '~/.ssh/production.key'
                      sshCommand remote: remote, command: "docker stop mysqldb backend frontend || true"
                      sshCommand remote: remote, command: "docker rm backend mysqldb frontend || true"
-                     sshCommand remote: remote, command: "docker rmi ${DOCKER_REGISTRY}/devops/api:production ${DOCKER_REGISTRY}/devops/ui:production || true"
+                     sshCommand remote: remote, command: "docker rmi ${DOCKER_REGISTRY}/devops/api:prod ${DOCKER_REGISTRY}/devops/ui:prod || true"
                      sshCommand remote: remote, command: "docker run -d -p 3306:3306 \
                         -e MYSQL_DATABASE=${MYSQL_DB_NAME} -e MYSQL_ROOT_PASSWORD=${MYSQL_DB_ROOT} -e MYSQL_USER=${MYSQL_DB_USER} -e MYSQL_PASSWORD=${MYSQL_DB_PASSWORD} \
                         -v /home/vagrant/mysql:/var/lib/mysql \
@@ -180,9 +183,9 @@ pipeline {
                 remote.identityFile = '~/.ssh/production.key'
                 sshCommand remote: remote, command: "docker run -d -p 8080:8080 --link mysqldb -e MYSQL_DB_USER=${MYSQL_DB_USER} \
                   -e MYSQL_DB_PASSWORD=${MYSQL_DB_PASSWORD} -e MYSQL_JDBC_URL=${MYSQL_STAGING_URL} -e MYSQL_DB_NAME=${MYSQL_DB_NAME} \
-                  -v /home/vagrant/logs:/home/boot/logs/ --name backend ${DOCKER_REGISTRY}/devops/api:production"
+                  -v /home/vagrant/logs:/home/boot/logs/ --name backend ${DOCKER_REGISTRY}/devops/api:prod"
                 sshCommand remote: remote, command: "docker run -d -p 80:80 --link backend \
-                  --name frontend ${DOCKER_REGISTRY}/devops/ui:production"                  
+                  --name frontend ${DOCKER_REGISTRY}/devops/ui:prod"                  
             }
          }
       }                       
