@@ -62,7 +62,7 @@ pipeline {
                ui: { // Prepare the Docker image for the staging ui
                   sh '''
                      mv frontend/nginx-staging.conf frontend/nginx.conf
-                     docker build --build-arg STAGE=staging -t "devops/ui:staging" -f frontend/Dockerfile .
+                     //docker build --build-arg STAGE=staging -t "devops/ui:staging" -f frontend/Dockerfile .
                      docker tag "devops/ui:staging" "${DOCKER_REGISTRY}/devops/ui:staging"
                      docker push "${DOCKER_REGISTRY}/devops/ui:staging"
                      docker rmi "${DOCKER_REGISTRY}/devops/ui:staging"
@@ -128,7 +128,7 @@ pipeline {
                ui: { // Prepare the Docker image for the staging ui
                   sh '''
                      mv frontend/nginx-prod.conf frontend/nginx.conf
-                     docker build --build-arg STAGE=prod -t "devops/ui:prod" -f frontend/Dockerfile .
+                     // docker build --build-arg STAGE=prod -t "devops/ui:prod" -f frontend/Dockerfile .
                      docker tag "devops/ui:prod" "${DOCKER_REGISTRY}/devops/ui:prod"
                      docker push "${DOCKER_REGISTRY}/devops/ui:prod"
                      docker rmi "${DOCKER_REGISTRY}/devops/ui:prod"
