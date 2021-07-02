@@ -62,7 +62,7 @@ pipeline {
                ui: { // Prepare the Docker image for the staging ui
                   sh '''
                      mv frontend/nginx-staging.conf frontend/nginx.conf
-                     docker build --no-cache --build-arg STAGE=staging -t "devops/ui:staging" -f frontend/Dockerfile .
+                     docker build --build-arg STAGE=staging -t "devops/ui:staging" -f frontend/Dockerfile .
                      docker tag "devops/ui:staging" "${DOCKER_REGISTRY}/devops/ui:staging"
                      docker push "${DOCKER_REGISTRY}/devops/ui:staging"
                      docker rmi "${DOCKER_REGISTRY}/devops/ui:staging"
@@ -71,7 +71,7 @@ pipeline {
                },
                api: {
                   sh '''
-                     docker build --no-cache --build-arg FILE_NAME=${GIT_COMMIT} -t "devops/api:staging" -f backend/Dockerfile .
+                     docker build --build-arg FILE_NAME=${GIT_COMMIT} -t "devops/api:staging" -f backend/Dockerfile .
                      docker tag "devops/api:staging" "${DOCKER_REGISTRY}/devops/api:staging"
                      docker push "${DOCKER_REGISTRY}/devops/api:staging"
                      docker rmi "${DOCKER_REGISTRY}/devops/api:staging"
@@ -130,7 +130,7 @@ pipeline {
                ui: { // Prepare the Docker image for the staging ui
                   sh '''
                      mv frontend/nginx-prod.conf frontend/nginx.conf
-                     docker build --no-cache --build-arg STAGE=prod -t "devops/ui:prod" -f frontend/Dockerfile .
+                     docker build --build-arg STAGE=prod -t "devops/ui:prod" -f frontend/Dockerfile .
                      docker tag "devops/ui:prod" "${DOCKER_REGISTRY}/devops/ui:prod"
                      docker push "${DOCKER_REGISTRY}/devops/ui:prod"
                      docker rmi "${DOCKER_REGISTRY}/devops/ui:prod"
@@ -139,7 +139,7 @@ pipeline {
                },
                api: {
                   sh '''
-                     docker build --no-cache --build-arg FILE_NAME=${GIT_COMMIT} -t "devops/api:prod" -f backend/Dockerfile .
+                     docker build --build-arg FILE_NAME=${GIT_COMMIT} -t "devops/api:prod" -f backend/Dockerfile .
                      docker tag "devops/api:prod" "${DOCKER_REGISTRY}/devops/api:prod"
                      docker push "${DOCKER_REGISTRY}/devops/api:prod"
                      docker rmi "${DOCKER_REGISTRY}/devops/api:prod"
