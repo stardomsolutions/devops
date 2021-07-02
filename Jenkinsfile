@@ -194,9 +194,4 @@ pipeline {
          }
       }                       
    }
-
-    always {
-      step([$class: 'WsCleanup'])
-    }
-  }
 }
