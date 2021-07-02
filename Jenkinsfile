@@ -144,24 +144,23 @@ pipeline {
                },
                db: { 
                   // Parallely start the MySQL Daemon in the staging server first stop if already running then start
-                  withCredentials([string(credentialsId: 'mysqlroot', variable: 'mysqlroot'), string(credentialsId: 'mysqldbpw', variable: 'mysqldbpw')]){
-                     script {
-                        def remote = [:]
-                        remote.name = 'production'
-                        remote.user = 'vagrant'
-                        remote.allowAnyHosts = true
-                        remote.host = 'production.devops'
-                        remote.identityFile = '~/.ssh/production.key'
-                        sshCommand remote: remote, command: "docker stop mysqldb backend frontend || true"
-                           sshCommand remote: remote, command: "docker rm backend mysqldb frontend || true"
-                           sshCommand remote: remote, command: "docker rmi ${DOCKER_REGISTRY}/devops/api:prod ${DOCKER_REGISTRY}/devops/ui:prod || true"
-                           sshCommand remote: remote, command: "docker run -d -p 3306:3306 \
-                           -e MYSQL_DATABASE=${MYSQL_DB_NAME} -e MYSQL_ROOT_PASSWORD=${mysqlroot} \
-                           -e MYSQL_USER=${MYSQL_DB_NAME} -e MYSQL_PASSWORD=${mysqldbpw} \
-                           -v /home/vagrant/mysql:/var/lib/mysql \
-                           --name mysqldb mysql \
-                           --default-authentication-plugin=mysql_native_password"
-                     }
+                  //withCredentials([string(credentialsId: 'mysqlroot', variable: 'mysqlroot'), string(credentialsId: 'mysqldbpw', variable: 'mysqldbpw')]){
+                  script {
+                     def remote = [:]
+                     remote.name = 'production'
+                     remote.user = 'vagrant'
+                     remote.allowAnyHosts = true
+                     remote.host = 'production.devops'
+                     remote.identityFile = '~/.ssh/production.key'
+                     sshCommand remote: remote, command: "docker stop mysqldb backend frontend || true"
+                     sshCommand remote: remote, command: "docker rm backend mysqldb frontend || true"
+                     sshCommand remote: remote, command: "docker rmi ${DOCKER_REGISTRY}/devops/api:production ${DOCKER_REGISTRY}/devops/ui:production || true"
+                     sshCommand remote: remote, command: "docker run -d -p 3306:3306 \
+                        -e MYSQL_DATABASE=${MYSQL_DB_NAME} -e MYSQL_ROOT_PASSWORD=${MYSQL_DB_ROOT} -e MYSQL_USER=${MYSQL_DB_USER} -e MYSQL_PASSWORD=${MYSQL_DB_PASSWORD} \
+                        -v /home/vagrant/mysql:/var/lib/mysql \
+                        --name mysqldb mysql \
+                        --default-authentication-plugin=mysql_native_password"
+                  //}  
                   }               
                }
             )
