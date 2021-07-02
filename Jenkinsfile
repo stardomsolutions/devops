@@ -66,7 +66,6 @@ pipeline {
                      docker tag "devops/ui:staging" "${DOCKER_REGISTRY}/devops/ui:staging"
                      docker push "${DOCKER_REGISTRY}/devops/ui:staging"
                      docker rmi "${DOCKER_REGISTRY}/devops/ui:staging"
-                     docker rmi "devops/ui:staging"
                   '''
                },
                api: {
@@ -75,7 +74,6 @@ pipeline {
                      docker tag "devops/api:staging" "${DOCKER_REGISTRY}/devops/api:staging"
                      docker push "${DOCKER_REGISTRY}/devops/api:staging"
                      docker rmi "${DOCKER_REGISTRY}/devops/api:staging"
-                     docker rmi "devops/api:staging"
                   '''
                },
                db: { // Parallely start the MySQL Daemon in the staging server first stop if already running then start
@@ -134,7 +132,6 @@ pipeline {
                      docker tag "devops/ui:prod" "${DOCKER_REGISTRY}/devops/ui:prod"
                      docker push "${DOCKER_REGISTRY}/devops/ui:prod"
                      docker rmi "${DOCKER_REGISTRY}/devops/ui:prod"
-                     docker rmi "devops/ui:prod"
                   '''
                },
                api: {
@@ -143,7 +140,6 @@ pipeline {
                      docker tag "devops/api:prod" "${DOCKER_REGISTRY}/devops/api:prod"
                      docker push "${DOCKER_REGISTRY}/devops/api:prod"
                      docker rmi "${DOCKER_REGISTRY}/devops/api:prod"
-                     docker rmi "devops/api:prod"
                   '''
                },
                db: { 
