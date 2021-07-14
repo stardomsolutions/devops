@@ -27,17 +27,8 @@ pipeline {
             parallel(
                ui: { 
                   sh '''
-                        tar czf ${GIT_COMMIT}.tar.gz frontend/
+                        echo "tar czf ${GIT_COMMIT}.tar.gz frontend/"
                   '''            
-                  script {
-                     def remote = [:]
-                     remote.name = 'archiver'
-                     remote.user = 'vagrant'
-                     remote.allowAnyHosts = true
-                     remote.host = 'archiver.devops'
-                     remote.identityFile = '~/.ssh/archiver.key'
-                     sshPut remote: remote, filterRegex: '.tar.gz$',from: '.' ,into: '/home/vagrant/archiver/frontend'
-                  }
                },
                api:{
                   sh '''
